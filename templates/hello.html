@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block title %} Welcome {% endblock %}
+
+{% block content %}
+{% if user_ip %}
+    <h1>Your ip is {{ user_ip }}</h1>
+{% else %}
+    <a href="{{ url_for('index') }}">Go to home</a>
+{% endif %}
+
+{% endblock %}
