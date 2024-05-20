@@ -1,0 +1,6 @@
+#Ignore the notes I'm using to tack the project development
+advances.ipynb
+
+#Some chache files for venv
+managed_context
+test_suite_analysis
