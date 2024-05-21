@@ -25,11 +25,5 @@
 
         {{ wtf.quick_form(login_form) }}
     </div>
-    <ul>
-    {% for todo in todos %}
-        {{ macros.render_todo(todo) }}
-        <br>
-    {% endfor %}
-</ul>
 
 {% endblock %}
