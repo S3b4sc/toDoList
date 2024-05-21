@@ -4,3 +4,4 @@ advances.ipynb
 #Some chache files for venv
 managed_context
 test_suite_analysis
+__pycache__
