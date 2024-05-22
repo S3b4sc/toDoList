@@ -1,4 +1,4 @@
-from flask import request, make_response, redirect, render_template, session, url_for, flash
+from flask import request, make_response, redirect, render_template, session, url_for
 import unittest
 
 from app import create_app
@@ -14,8 +14,6 @@ def test():
 
 #-------------------------------
  
- 
- 
 @app.route('/')
 def index():
     
@@ -25,25 +23,14 @@ def index():
     
     return response
 
-@app.route('/hello', methods= ['GET', 'POST'])  #For the  form to be allowed.
+@app.route('/hello', methods= ['GET'])  #For the  form to be allowed.
 def hello():
     
     user_ip = session.get('user_ip')
-    login_form = LoginForm()
     username = session.get('username')
-    
-    if login_form.validate_on_submit():     #Is the form is sended and its correct, then...
-        username = login_form.username.data             #We get the data form the form
-        session['username'] = username          #save the name on the session.
-        
-        flash('Nombre de usuario registrado con éxito')
-        
-        return redirect(url_for('index'))           #Once sended we go back to the form to be filled.
-    
     
     context = {
         'user_ip': user_ip,
-        'login_form': login_form,
         'username': username
     }
     

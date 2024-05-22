@@ -28,14 +28,14 @@ class MainTest(TestCase):
         
         self.assert200(response)
         
-    #def test_hello_post(self):      #Now we check the form
+    def test_hello_post(self):      #Now we check the form
     #    fake_form = {
     #        'username': 'fake',
     #        'fake_password':'fake-password'             # this tryal is not working wither, flask test in the console to run tests.
     #    }
-    #    response = self.client.post(url_for('hello'), data = {})
+        response = self.client.post(url_for('hello'))
         
-    #    self.assertRedirects(response, url_for('index'))    #After the form we are redirected correctly.
+        self.assertTrue(response.status_code, 405)    #After the form we are redirected correctly.
         
         
     def test_auth_blueprint_exists(self):
@@ -46,7 +46,16 @@ class MainTest(TestCase):
         
         self.assert200(response)
         
-    def test_auth_login_template(self):
-        response = self.client.get(url_for('auth.login'))
+    def test_auth_login_template(self):     #We check the longin.html us being used in that context
+        self.client.get(url_for('auth.login'))
+
+        self.assertTemplateUsed('login.html')
         
-        self.assertTemplateUsed(response, 'login.html')
+    def test_auth_login_post(self):
+        fake_form = {
+            'username': 'fake',
+            'password': 'fake_password'
+        }
+
+        response = self.client.post(url_for('auth.login'), data=fake_form)
+        self.assertRedirects(response, url_for('index'))
