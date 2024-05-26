@@ -1,8 +1,11 @@
 from flask import render_template, flash, session, redirect, url_for
 from flask import Blueprint
 
+from werkzeug.security import generate_password_hash, check_password_hash
+
 from app.forms import LoginForm
 from app.firestore_service import get_user  #To create the login and logout
+from app.firestore_service import user_put 
 from app.models import UserModel, UserData
 
 from flask_login import login_user, login_required, logout_user
@@ -29,7 +32,7 @@ def login():
             password_from_db = user_doc.to_dict()['password']
             
             #verify the password
-            if password == password_from_db:
+            if check_password_hash(password_from_db, password):
                 user_data = UserData(username, password)
                 
                 #The user we are currently at
@@ -50,6 +53,38 @@ def login():
     
 
     return render_template('login.html', **context)
+
+@authBlueprint.route('/signup', methods=['GET','POST'])
+def signup():
+    signup_form = LoginForm()
+    
+    
+    context = {
+        'signup_form': signup_form
+    }
+    
+    if signup_form.validate_on_submit():
+        username = signup_form.username.data        #Get the info from the form
+        password = signup_form.password.data
+        
+        user_doc = get_user(username)
+        
+        if user_doc.to_dict() is None:
+            password_hash = generate_password_hash(password)
+            user_data = UserData(username, password_hash)   #The data to store
+            
+            user_put(user_data)
+            
+            user = UserModel(user_data)
+            login_user(user)
+            
+            flash('Bienveido!')
+            return redirect(url_for('hello'))
+        else:
+            flash('El usuario ya existe')
+    
+    return render_template('signup.html', **context)
+
 
 @authBlueprint.route('/logout')
 @login_required                 #We can only sigout if we are loged.

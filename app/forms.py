@@ -9,3 +9,13 @@ class LoginForm(FlaskForm):          #we have to extend the class we imported fr
     
     #Now we button
     submit = SubmitField('Enviar')
+    
+class TodoForm(FlaskForm):
+    description = StringField('Descripción', validators=[DataRequired()])
+    submit = SubmitField('Crear')
+    
+class DeleteTodoform(FlaskForm):
+    submit = SubmitField('Borrar')
+    
+class UpdateTodoform(FlaskForm):
+    submit = SubmitField('Cambiar estado')
